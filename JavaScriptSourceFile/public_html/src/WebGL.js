@@ -9,7 +9,7 @@ var gGL = null;
 
 function initializeGL(){
     var canvas = document.getElementById("GLCanvas");
-    gGL = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    gGL = canvas.getContext("webgl") || canvas.getContext("experimentalwebgl");
     if(gGL !== null){
         gGL.clearColor(0.0, 0.8, 0.0,1.0);
         initSquareBuffer();
