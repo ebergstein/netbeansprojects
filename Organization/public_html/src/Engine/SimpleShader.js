@@ -24,11 +24,12 @@ function SimpleShader(vertexShaderID, fragmentShaderID){
 }
 
 SimpleShader.prototype._loadAndCompileShader = function(id, shaderType){
-    var shaderText, shaderSource, compliedShader;
+    var shaderText, shaderSource, compiledShader;
     var gl = gEngine.Core.getGL();
     shaderText = document.getElementById(id);
     shaderSource = shaderText.firstChild.textContent;
     compiledShader = gl.createShader(shaderType);
+    gl.shaderSource(compiledShader, shaderSource);
     gl.compileShader(compiledShader);
     if(!gl.getShaderParameter(compiledShader, gl.COMPILE_STATUS)){
         alert("A shading compiling error occurred:" + gl.getShaderInfoLog(compiledShader));
