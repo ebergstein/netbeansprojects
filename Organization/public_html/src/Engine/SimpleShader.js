@@ -7,6 +7,7 @@
 function SimpleShader(vertexShaderID, fragmentShaderID){
     this.mCompiledShader = null;
     this.mShaderVertexPositionAttribute = null;
+    this.mPixelColor = null;
     var gl = gEngine.Core.getGL();
     var vertexShader = this._loadAndCompileShader(vertexShaderID, gl.VERTEX_SHADER);
     var fragmentShader = this._loadAndCompileShader(fragmentShaderID, gl.FRAGMENT_SHADER);
@@ -21,13 +22,25 @@ function SimpleShader(vertexShaderID, fragmentShaderID){
     this.mShaderVertexPositionAttribute = gl.getAttribLocation(this.mCompiledShader, "aSquareVertexPosition");
     gl.bindBuffer(gl.ARRAY_BUFFER, gEngine.VertexBuffer.getGLVertexRef());
     gl.vertexAttribPointer(this.mShaderVertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+    this.mPixelColor = gl.getUniformLocation(this.mCompiledShader, "uPixelColor");
 }
 
-SimpleShader.prototype._loadAndCompileShader = function(id, shaderType){
-    var shaderText, shaderSource, compiledShader;
+SimpleShader.prototype._loadAndCompileShader = function(filePath, shaderType){
+    var xmlReq, shaderSource, compiledShader;
     var gl = gEngine.Core.getGL();
-    shaderText = document.getElementById(id);
-    shaderSource = shaderText.firstChild.textContent;
+    xmlReq = new XMLHttpRequest();
+    xmlReq.open("GET", filePath, false);
+    try{
+        xmlReq.send();
+    }catch(error){
+        alert("Failed to load shader: " + filePath);
+        return null;
+    }
+    shaderSource = xmlReq.responseText;
+    if(shaderSource === null){
+        alert("WARNING: Loading of: " + filePath + " Failed!");
+        return null;
+    }
     compiledShader = gl.createShader(shaderType);
     gl.shaderSource(compiledShader, shaderSource);
     gl.compileShader(compiledShader);
@@ -37,10 +50,11 @@ SimpleShader.prototype._loadAndCompileShader = function(id, shaderType){
     return compiledShader;
 };
 
-SimpleShader.prototype.activateShader = function(){
+SimpleShader.prototype.activateShader = function(pixelColor){
     var gl = gEngine.Core.getGL();
     gl.useProgram(this.mCompiledShader);
     gl.enableVertexAttribArray(this.mShaderVertexPositionAttribute);
+    gl.uniform4fv(this.mPixelColor, pixelColor);
 };
 
 SimpleShader.prototype.getShader = function(){ return this.mCompiledShader; };
