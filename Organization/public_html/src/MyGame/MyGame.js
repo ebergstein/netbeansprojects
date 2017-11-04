@@ -12,14 +12,14 @@ function MyGame(htmlCanvasID){
     this.mRedSq = new Renderable(this.mConstColorShader);
     this.mRedSq.setColor([1,0,0,1]);
     gEngine.Core.clearCanvas([0, 0.8, 0, 1]);
-    var xform = mat4.create();
-    mat4.translate(xform, xform, vec3.fromValues(-0.25, 0.25, 0.0));
-    mat4.rotateZ(xform, xform, 0.2);
-    mat4.scale(xform, xform, vec3.fromValues(1.2, 1.2, 1.0));
-    this.mWhiteSq.draw(xform);
-    mat4.identity(xform);
-    mat4.translate(xform, xform, vec3.fromValues(0.25, -0.25, 0.0));
-    mat4.rotateZ(xform, xform, -0.785);
-    mat4.scale(xform, xform, vec3.fromValues(0.4, 0.4, 1.0));
-    this.mRedSq.draw(xform);
+    this.mWhiteSq.getXForm().setPosition(-0.25, 0.25);
+    this.mWhiteSq.getXForm().setRotationInRad(0.2);
+    this.mWhiteSq.getXForm().setSize(1.2, 1.2);
+    this.mWhiteSq.draw();
+    this.mRedSq.getXForm().setXPos(0.25);
+    this.mRedSq.getXForm().setYPos(-0.25);
+    this.mRedSq.getXForm().setRotationInDegree(45);
+    this.mRedSq.getXForm().setHeight(0.4);
+    this.mRedSq.getXForm().setWidth(0.4);
+    this.mRedSq.draw();
 }
