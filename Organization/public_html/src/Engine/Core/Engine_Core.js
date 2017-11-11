@@ -9,14 +9,18 @@ var gEngine = gEngine || {};
 gEngine.Core = (function(){
     var mGL = null;
     var getGL = function(){ return mGL; };
-    var initializeWebGL = function(htmlCanvasID){
+    var _initializeWebGL = function(htmlCanvasID){
         var canvas = document.getElementById(htmlCanvasID);
         mGL = canvas.getContext("webgl") || canvas.getContext("experimentalwebgl");
         if(mGL === null){
             document.write("<br><b>WebGL is not supported!</b>");
             return;
         }
+    };
+    var initializeEngineCore = function(htmlCanvasID){
+        _initializeWebGL(htmlCanvasID);
         gEngine.VertexBuffer.initialize();
+        gEngine.Input.initialize();
     };
     var clearCanvas = function(color){
         mGL.clearColor(color[0], color[1], color[2], color[3]);
@@ -24,7 +28,7 @@ gEngine.Core = (function(){
     };
     var mPublic = {
         getGL: getGL,
-        initializeWebGL: initializeWebGL,
+        initializeEngineCore: initializeEngineCore,
         clearCanvas: clearCanvas
     };
     return mPublic;

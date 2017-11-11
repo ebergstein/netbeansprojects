@@ -22,6 +22,7 @@ gEngine.GameLoop = (function(){
             mPreviousTime = mCurrentTime;
             mLagTime += mElapsedTime;
             while((mLagTime >= kMPF) && mIsLoopRunning){
+                gEngine.Input.update();
                 this.update();
                 mLagTime -= kMPF;
             }
